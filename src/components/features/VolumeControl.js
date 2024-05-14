@@ -7,19 +7,20 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
   const handleMuteToggle = useCallback(() => {
     const newMuted = !isMuted;
     setIsMuted(newMuted);
-    setVolume(newMuted ? 0 : volume); // Set volume to 0 if muted, otherwise keep the current volume
+    setVolume(newMuted ? 0 : volume);
     if (mediaRef && mediaRef.current) {
       mediaRef.current.muted = newMuted;
     }
-  }, [isMuted, setIsMuted, setVolume, volume, mediaRef]);
+  }, [isMuted, setIsMuted, setVolume, volume, mediaRef]);  
 
   const handleVolumeChange = useCallback((newVolume) => {
-    setVolume(newVolume); // Update the volume state
-    setIsMuted(newVolume === 0); // Update the mute state based on the new volume
+    setVolume(newVolume);
+    setIsMuted(newVolume === 0);
     if (mediaRef && mediaRef.current) {
-      mediaRef.current.volume = newVolume; // Set the volume on the media element
+      mediaRef.current.volume = newVolume;
     }
   }, [setVolume, setIsMuted, mediaRef]);
+  
 
   const handleMouseEnterVolume = () => {
     setShowVolumeSlider(true);
@@ -31,30 +32,27 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // Prevent default behavior of Up and Down arrow keys
       if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 77) {
         event.preventDefault();
       }
 
       switch (event.keyCode) {
-        case 38: // Up arrow key
-          handleVolumeChange(Math.min(volume + 0.1, 1)); // Increase volume by 0.1
+        case 38:
+          handleVolumeChange(Math.min(volume + 0.1, 1));
           break;
-        case 40: // Down arrow key
-          handleVolumeChange(Math.max(volume - 0.1, 0)); // Decrease volume by 0.1
+        case 40:
+          handleVolumeChange(Math.max(volume - 0.1, 0));
           break;
-        case 77: // M key
-          handleMuteToggle(); // Toggle mute
+        case 77:
+          handleMuteToggle();
           break;
         default:
           break;
       }
     };
 
-    // Add event listener when component mounts
     window.addEventListener('keydown', handleKeyDown);
 
-    // Remove event listener when component unmounts
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -90,7 +88,7 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
         id="volumeSlider"
         min="0"
         max="1"
-        step="0.01" // Use a smaller step for smoother volume control
+        step="0.01"
         value={volume}
         onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
         disabled={isMuted}

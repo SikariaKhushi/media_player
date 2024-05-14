@@ -10,21 +10,19 @@ const SkipControl = ({ mediaRef }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       switch (event.keyCode) {
-        case 37: // Left arrow key
-          handleSkip(-10); // Skip backward by 10 seconds
+        case 37:
+          handleSkip(-10);
           break;
-        case 39: // Right arrow key
-          handleSkip(10); // Skip forward by 10 seconds
+        case 39:
+          handleSkip(10);
           break;
         default:
           break;
       }
     };
 
-    // Add event listener when component mounts
     window.addEventListener('keydown', handleKeyDown);
 
-    // Remove event listener when component unmounts
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };

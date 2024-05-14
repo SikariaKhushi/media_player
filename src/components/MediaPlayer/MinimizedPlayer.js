@@ -6,10 +6,10 @@ const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentT
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    let currentMediaRef = mediaRef.current; // Create a local variable to hold the current value of mediaRef.current
+    let currentMediaRef = mediaRef.current;
     
     if (currentMediaRef) {
-      currentMediaRef.currentTime = currentTime; // Set current playback position
+      currentMediaRef.currentTime = currentTime;
       currentMediaRef.play().then(() => {
         setIsPlaying(true);
       }).catch(error => console.error('Error playing media:', error));
@@ -31,7 +31,7 @@ const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentT
     };
 
     if (isPlaying) {
-      const intervalId = setInterval(updateCurrentTime, 1000); // Update current time every second
+      const intervalId = setInterval(updateCurrentTime, 1000);
       return () => clearInterval(intervalId);
     }
   }, [isPlaying, onCurrentTimeChange]);
@@ -45,7 +45,7 @@ const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentT
       className="fixed bottom-2 right-2 bg-black rounded-lg overflow-hidden transition-all duration-300"
       style={{
         width: '300px',
-        height: '169px', // Aspect ratio 16:9
+        height: '169px',
         position: 'fixed',
       }}
     >

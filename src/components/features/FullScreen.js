@@ -6,22 +6,22 @@ const FullScreen = ({ trackRef }) => {
     const elem = trackRef.current;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { // Firefox
+    } else if (elem.mozRequestFullScreen) { 
       elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+    } else if (elem.webkitRequestFullscreen) { 
       elem.webkitRequestFullscreen();
     }
-  }, [trackRef]); // Memoize the function and include dependencies
+  }, [trackRef]);
 
   const exitFullscreen = useCallback(() => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { // Firefox
+    } else if (document.mozCancelFullScreen) {
       document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { // Chrome, Safari, and Opera
+    } else if (document.webkitExitFullscreen) {
       document.webkitExitFullscreen();
     }
-  }, []); // Memoize the function
+  }, []);
 
   const handleFullScreen = useCallback(() => {
     if (!document.fullscreenElement) {
@@ -29,27 +29,23 @@ const FullScreen = ({ trackRef }) => {
     } else {
       exitFullscreen();
     }
-  }, [enterFullscreen, exitFullscreen]); // Memoize the function and include dependencies
+  }, [enterFullscreen, exitFullscreen]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.keyCode === 27) {
-        // Esc key pressed
         exitFullscreen();
       } else if (event.keyCode === 70) {
-        // F key pressed
         handleFullScreen();
       }
     };
 
-    // Add event listener when component mounts
     window.addEventListener('keydown', handleKeyDown);
 
-    // Remove event listener when component unmounts
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleFullScreen, exitFullscreen]); // Include handleFullScreen and exitFullscreen in the dependency array
+  }, [handleFullScreen, exitFullscreen]);
 
   return (
     <button onClick={handleFullScreen} className="btn text-white pl-6">

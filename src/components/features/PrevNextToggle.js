@@ -4,25 +4,23 @@ const PrevNextToggle = ({ handlePrev, handleNext }) => {
   useEffect(() => {
     const handleKeyPress = (event) => {
       switch (event.key) {
-        case 'p': // 'P' key
-          handlePrev(); // Play previous media
+        case 'p':
+          handlePrev(); 
           break;
-        case 'n': // 'N' key
-          handleNext(); // Play next media
+        case 'n': 
+          handleNext(); 
           break;
         default:
           break;
       }
     };
 
-    // Add event listener when component mounts
     window.addEventListener('keydown', handleKeyPress);
 
-    // Remove event listener when component unmounts
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [handlePrev, handleNext]); // Include handlePrev and handleNext in the dependency array
+  }, [handlePrev, handleNext]);
 
   return (
     <div className="flex items-center">

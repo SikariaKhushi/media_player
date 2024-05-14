@@ -8,8 +8,8 @@ const ProgressBar = ({ mediaRef, onCurrentTimeChange, onTotalTimeChange }) => {
       const currentTime = mediaRef.currentTime;
       const duration = mediaRef.duration;
       setProgress((currentTime / duration) * 100 || 0);
-      onCurrentTimeChange(currentTime); // Update current time
-      onTotalTimeChange(duration); // Update total time
+      onCurrentTimeChange(currentTime); 
+      onTotalTimeChange(duration);
     }
   }, [mediaRef, onCurrentTimeChange, onTotalTimeChange]);
 

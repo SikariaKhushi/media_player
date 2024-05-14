@@ -4,17 +4,12 @@ const PlayPauseToggle = ({ isPlaying, handlePlayPause }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.keyCode === 32) {
-        // Spacebar key pressed
         handlePlayPause();
       }
     };
-
-    // Add event listener when component mounts
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Remove event listener when component unmounts
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [handlePlayPause]);
 

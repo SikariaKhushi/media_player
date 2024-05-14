@@ -11,7 +11,7 @@ const PlaybackSpeed = ({ playbackRate, setPlaybackRate, mediaRef }) => {
 
   const handlePlaybackSpeedSelect = (speed) => {
     handlePlaybackRateChange({ target: { value: speed } });
-    setShowPlaybackSpeedOptions(false); // Close the dropdown after selecting an option
+    setShowPlaybackSpeedOptions(false);
   };
 
   const handlePlaybackRateChange = (e) => {
@@ -27,8 +27,8 @@ const PlaybackSpeed = ({ playbackRate, setPlaybackRate, mediaRef }) => {
       {showPlaybackSpeedOptions && (
         <ul
           className="absolute bottom-full left-0 bg-gray-800 text-white p-2 rounded"
-          onMouseEnter={() => setShowPlaybackSpeedOptions(true)} // Keep the dropdown open when hovering over it
-          onMouseLeave={() => setShowPlaybackSpeedOptions(false)} // Close the dropdown when leaving it
+          onMouseEnter={() => setShowPlaybackSpeedOptions(true)}
+          onMouseLeave={() => setShowPlaybackSpeedOptions(false)}
         >
           {playbackSpeedOptions.map((speed, index) => (
             <li key={index} onClick={() => handlePlaybackSpeedSelect(speed)} className="cursor-pointer">
@@ -38,8 +38,8 @@ const PlaybackSpeed = ({ playbackRate, setPlaybackRate, mediaRef }) => {
         </ul>
       )}
       <button
-        onMouseEnter={() => setShowPlaybackSpeedOptions(true)} // Open the dropdown when hovering over the button
-        onMouseLeave={() => setShowPlaybackSpeedOptions(false)} // Close the dropdown when leaving the button
+        onMouseEnter={() => setShowPlaybackSpeedOptions(true)} 
+        onMouseLeave={() => setShowPlaybackSpeedOptions(false)}
         onClick={togglePlaybackSpeedOptions}
         className="btn text-white relative"
       >

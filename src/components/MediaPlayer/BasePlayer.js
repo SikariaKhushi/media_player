@@ -66,7 +66,6 @@ const BasePlayer = ({ url, type }) => {
       mediaRef.addEventListener('loadedmetadata', handleMediaLoaded);
 
       if (isPlaying) {
-        mediaRef.currentTime = currentTime; // Set current playback position
         mediaRef.play().catch(error => console.error('Error playing media:', error));
       } else {
         mediaRef.pause();
@@ -104,7 +103,7 @@ const BasePlayer = ({ url, type }) => {
         </div>
       )}
       {!isMinimized ? (
-        <div ref={trackRef} className="absolute inset-0 overflow-hidden">
+        <div ref={trackRef} className="absolute top-1/2 left-1/2 transform translate-y-[-50%] translate-x-[-50%] w-[50vw] h-[50vh] overflow-hidden" onMouseEnter={() => setShowControls(true)} onMouseLeave={() => setShowControls(false)}>
           {type === 'audio' ? (
             <div className="relative h-full">
               <img src={audioimg} alt="Audio Cover" className="absolute inset-0 w-full h-full object-cover rounded-lg" />
@@ -129,14 +128,14 @@ const BasePlayer = ({ url, type }) => {
               />
             </div>
           )}
-          {showControls && (
+          {(showControls || !isPlaying) && (
             <ProgressBar
               mediaRef={mediaRef}
               onCurrentTimeChange={handleCurrentTimeChange}
               onTotalTimeChange={handleTotalTimeChange}
             />
           )}
-          {showControls && (
+          {(showControls || !isPlaying) && (
             <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 flex justify-between items-center">
               <div className="flex items-center">
                 <PlayPauseToggle isPlaying={isPlaying} handlePlayPause={() => dispatch(playPause())} />
