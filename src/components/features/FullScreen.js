@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 const FullScreen = ({ trackRef }) => {
 
-  const enterFullscreen = () => {
+  const enterFullscreen = useCallback(() => {
     const elem = trackRef.current;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
@@ -11,9 +11,9 @@ const FullScreen = ({ trackRef }) => {
     } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, and Opera
       elem.webkitRequestFullscreen();
     }
-  };
+  }, [trackRef]); // Memoize the function and include dependencies
 
-  const exitFullscreen = () => {
+  const exitFullscreen = useCallback(() => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.mozCancelFullScreen) { // Firefox
@@ -21,15 +21,15 @@ const FullScreen = ({ trackRef }) => {
     } else if (document.webkitExitFullscreen) { // Chrome, Safari, and Opera
       document.webkitExitFullscreen();
     }
-  };
+  }, []); // Memoize the function
 
-  const handleFullScreen = () => {
+  const handleFullScreen = useCallback(() => {
     if (!document.fullscreenElement) {
       enterFullscreen();
     } else {
       exitFullscreen();
     }
-  };
+  }, [enterFullscreen, exitFullscreen]); // Memoize the function and include dependencies
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -49,7 +49,7 @@ const FullScreen = ({ trackRef }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []); // Empty dependency array to run effect only once when component mounts
+  }, [handleFullScreen, exitFullscreen]); // Include handleFullScreen and exitFullscreen in the dependency array
 
   return (
     <button onClick={handleFullScreen} className="btn text-white pl-6">

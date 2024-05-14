@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 const SkipControl = ({ mediaRef }) => {
-  const handleSkip = (seconds) => {
+  const handleSkip = useCallback((seconds) => {
     if (mediaRef) {
       mediaRef.currentTime += seconds;
     }
-  };
+  }, [mediaRef]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {

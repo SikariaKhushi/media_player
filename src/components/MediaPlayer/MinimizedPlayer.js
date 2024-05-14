@@ -6,18 +6,22 @@ const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentT
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    if (mediaRef.current) {
-      mediaRef.current.currentTime = currentTime; // Set current playback position
-      mediaRef.current.play().then(() => {
+    let currentMediaRef = mediaRef.current; // Create a local variable to hold the current value of mediaRef.current
+    
+    if (currentMediaRef) {
+      currentMediaRef.currentTime = currentTime; // Set current playback position
+      currentMediaRef.play().then(() => {
         setIsPlaying(true);
       }).catch(error => console.error('Error playing media:', error));
     }
+    
     return () => {
-      if (mediaRef.current) {
-        mediaRef.current.pause();
+      if (currentMediaRef) {
+        currentMediaRef.pause();
       }
     };
   }, [url, type, currentTime]);
+  
 
   useEffect(() => {
     const updateCurrentTime = () => {
