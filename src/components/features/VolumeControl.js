@@ -11,7 +11,7 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
     if (mediaRef && mediaRef.current) {
       mediaRef.current.muted = newMuted;
     }
-  }, [isMuted, setIsMuted, setVolume, volume, mediaRef]);  
+  }, [isMuted, setIsMuted, setVolume, volume, mediaRef]);
 
   const handleVolumeChange = useCallback((newVolume) => {
     setVolume(newVolume);
@@ -20,7 +20,6 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
       mediaRef.current.volume = newVolume;
     }
   }, [setVolume, setIsMuted, mediaRef]);
-  
 
   const handleMouseEnterVolume = () => {
     setShowVolumeSlider(true);
@@ -43,8 +42,8 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
         case 40:
           handleVolumeChange(Math.max(volume - 0.1, 0));
           break;
-        case 77:
-          handleMuteToggle();
+        case 77: 
+          handleMuteToggle(); 
           break;
         default:
           break;

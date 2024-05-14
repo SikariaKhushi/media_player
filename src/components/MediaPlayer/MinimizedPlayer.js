@@ -3,16 +3,17 @@ import audioimg from '../MediaPlayer/audio1.jpg';
 
 const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentTimeChange }) => {
   const mediaRef = useRef(null);
+  const currentTimeRef = useRef(currentTime); // Store current time without triggering re-renders
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     let currentMediaRef = mediaRef.current;
     
     if (currentMediaRef) {
-      currentMediaRef.currentTime = currentTime;
-      currentMediaRef.play().then(() => {
-        setIsPlaying(true);
-      }).catch(error => console.error('Error playing media:', error));
+      currentMediaRef.currentTime = currentTimeRef.current; // Use the stored current time
+      currentMediaRef.play()
+        .then(() => setIsPlaying(true))
+        .catch(error => console.error('Error playing media:', error));
     }
     
     return () => {
@@ -20,8 +21,7 @@ const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentT
         currentMediaRef.pause();
       }
     };
-  }, [url, type, currentTime]);
-  
+  }, [url, type]);
 
   useEffect(() => {
     const updateCurrentTime = () => {
@@ -41,35 +41,15 @@ const MinimizedPlayer = ({ onClose, onExpand, url, type, currentTime, onCurrentT
   };
 
   return (
-    <div
-      className="fixed bottom-2 right-2 bg-black rounded-lg overflow-hidden transition-all duration-300"
-      style={{
-        width: '300px',
-        height: '169px',
-        position: 'fixed',
-      }}
-    >
+    <div className="fixed bottom-2 right-2 bg-black rounded-lg overflow-hidden transition-all duration-300" style={{ width: '300px', height: '169px', position: 'fixed' }}>
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         {type === 'audio' ? (
           <div>
             <img src={audioimg} alt="Audio Cover" className="absolute inset-0 w-full h-full object-cover rounded-lg" />
-            <audio
-              ref={mediaRef}
-              src={url}
-              autoPlay
-              className="w-full h-full outline-none"
-              controls={false}
-              style={{ backgroundColor: 'transparent' }}
-            />
+            <audio ref={mediaRef} src={url} autoPlay className="w-full h-full outline-none" controls={false} style={{ backgroundColor: 'transparent' }} />
           </div>
         ) : (
-          <video
-            ref={mediaRef}
-            src={url}
-            autoPlay
-            className="w-full h-full object-cover outline-none"
-            controls={false}
-          />
+          <video ref={mediaRef} src={url} autoPlay className="w-full h-full object-cover outline-none" controls={false} />
         )}
         <div className="absolute top-2 left-2 p-2">
           <button onClick={onClose} className="text-white">
