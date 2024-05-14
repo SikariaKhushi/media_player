@@ -57,18 +57,13 @@ const BasePlayer = ({ url, type }) => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const handleLoadStart = useCallback(() => {
-    setIsLoading(true);
-  }, []);
-
-  const handleLoadedData = useCallback(() => {
+  const handleMediaLoaded = useCallback(() => {
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
     if (mediaRef) {
-      mediaRef.addEventListener('loadeddata', handleLoadedData);
-      mediaRef.addEventListener('loadstart', handleLoadStart);
+      mediaRef.addEventListener('loadedmetadata', handleMediaLoaded);
 
       if (isPlaying) {
         mediaRef.currentTime = currentTime; // Set current playback position
@@ -78,11 +73,10 @@ const BasePlayer = ({ url, type }) => {
       }
 
       return () => {
-        mediaRef.removeEventListener('loadeddata', handleLoadedData);
-        mediaRef.removeEventListener('loadstart', handleLoadStart);
+        mediaRef.removeEventListener('loadedmetadata', handleMediaLoaded);
       };
     }
-  }, [mediaRef, handleLoadedData, handleLoadStart, isPlaying, currentTime]);
+  }, [mediaRef, handleMediaLoaded, isPlaying, currentTime]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -97,6 +91,10 @@ const BasePlayer = ({ url, type }) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    setShowControls(!isLoading);
+  }, [isLoading]);
 
   return (
     <div className="relative h-screen bg-black" onMouseEnter={() => setShowControls(true)} onMouseLeave={() => setShowControls(false)}>

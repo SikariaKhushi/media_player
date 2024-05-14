@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const VolumeControl = ({ mediaRef, volume, setVolume }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
-  const handleMuteToggle = () => {
+  const handleMuteToggle = useCallback(() => {
     const newMuted = !isMuted;
     setIsMuted(newMuted);
     setVolume(newMuted ? 0 : volume); // Set volume to 0 if muted, otherwise keep the current volume
     if (mediaRef && mediaRef.current) {
       mediaRef.current.muted = newMuted;
     }
-  };
+  }, [isMuted, setIsMuted, setVolume, volume, mediaRef]);
 
-  const handleVolumeChange = (newVolume) => {
+  const handleVolumeChange = useCallback((newVolume) => {
     setVolume(newVolume); // Update the volume state
     setIsMuted(newVolume === 0); // Update the mute state based on the new volume
     if (mediaRef && mediaRef.current) {
       mediaRef.current.volume = newVolume; // Set the volume on the media element
     }
-  };
+  }, [setVolume, setIsMuted, mediaRef]);
 
   const handleMouseEnterVolume = () => {
     setShowVolumeSlider(true);
@@ -58,7 +58,22 @@ const VolumeControl = ({ mediaRef, volume, setVolume }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [volume, handleMuteToggle]);
+  }, [volume, handleMuteToggle, handleVolumeChange]);
+
+  useEffect(() => {
+    const handleVolumeChangeOnMedia = () => {
+      const newVolume = mediaRef.current.volume;
+      setVolume(newVolume);
+    };
+
+    if (mediaRef) {
+      mediaRef.addEventListener('volumechange', handleVolumeChangeOnMedia);
+
+      return () => {
+        mediaRef.removeEventListener('volumechange', handleVolumeChangeOnMedia);
+      };
+    }
+  }, [mediaRef, setVolume]);
 
   return (
     <div className="flex items-center pl-6" onMouseLeave={handleMouseLeaveVolume}>
